@@ -1,4 +1,4 @@
-<html lang="Serviceku.id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -340,6 +340,9 @@
                     </div>
                 </div>
 
+                <comment-tag id="1"><div class="text-xs bg-slate-100 p-3 rounded-xl text-slate-600">
+                    <p class="font-bold mb-0.5">
+                    
                 <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl text-sm shadow-md hover:shadow-lg transition-all active:scale-95">
                     Masuk ke Dashboard
                 </button>
@@ -652,12 +655,14 @@
             const user = auth.currentUser;
             if (!user) return;
 
+            // Public Collection Paths Rule 1: /artifacts/{appId}/public/data/{collectionName}
             const servicesRef = collection(db, 'artifacts', appId, 'public', 'data', 'services');
             const bannersRef = collection(db, 'artifacts', appId, 'public', 'data', 'banners');
 
             // Listen to Services
             onSnapshot(servicesRef, (snapshot) => {
                 if (snapshot.empty) {
+                    // Seed initial data if database is empty
                     seedInitialData();
                     return;
                 }
@@ -669,6 +674,7 @@
                 renderServices();
             }, (error) => {
                 console.error("Firestore Services Error:", error);
+                // Fallback to local default data on network issue
                 if (window.state.services.length === 0) {
                     window.state.services = INITIAL_SERVICES;
                     renderServices();
